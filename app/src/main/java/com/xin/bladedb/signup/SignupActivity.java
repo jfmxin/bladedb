@@ -3,27 +3,24 @@ package com.xin.bladedb.signup;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.xin.bladedb.MainApplication;
 import com.xin.bladedb.R;
-import com.xin.bladedb.login.LoginPresenter;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
@@ -36,10 +33,13 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
     EditText passwordField;
 
     @BindView(R.id.submit_signup)
-    Button signInButton;
+    Button signUpButton;
 
-    @BindView(R.id.google_signup)
-    Button googleSignInButton;
+    @BindView(R.id.signup_progress)
+    ProgressBar progressBar;
+
+    @BindView(R.id.signup_container)
+    LinearLayout signUpContainer;
 
     @Inject
     FirebaseAuth firebaseAuth;
@@ -48,8 +48,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
     FirebaseAuth.AuthStateListener firebaseListener;
 
     @Inject
-    LoginPresenter loginPresenter;
+    SignUpPresenter signUpPresenter;
 
+    //Lifecycle calls
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
         ButterKnife.bind(this);
         passwordField.setTransformationMethod(new PasswordTransformationMethod());
         ((MainApplication) getApplication()).getFireBaseComponent().inject(this);
+        signUpPresenter.setView(this);
     }
 
     @Override
@@ -73,45 +75,46 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
         }
     }
 
+    //Signup View Calls
     @Override
     public void hideProgress() {
-
+        signUpContainer.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showProgress() {
-
+        signUpContainer.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void showErrorMessage(String message) {
-
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showEmailWarning(String message) {
+        emailField.setError(message);
+    }
+
+    @Override
+    public void showPasswordWarning(String message) {
+        passwordField.setError(message);
+    }
+
+    @Override
+    public void returnToLogin(String email, String password) {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("email", email);
+        resultIntent.putExtra("password", password);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+    }
+
+    //OnClickListeners
     @OnClick(R.id.submit_signup)
     public void signUp() {
-        final String email = emailField.getText().toString();
-        final String password = passwordField.getText().toString();
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Timber.d("Signed up with Email: %s", task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(SignUpActivity.this, "Sign up complete!", Toast.LENGTH_SHORT).show();
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("email", email);
-                            resultIntent.putExtra("password", password);
-                            setResult(Activity.RESULT_OK, resultIntent);
-                            finish();
-                        }
-                    }
-                });
+        signUpPresenter.signUp(emailField.getText().toString(), passwordField.getText().toString());
     }
 }

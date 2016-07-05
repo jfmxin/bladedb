@@ -51,7 +51,7 @@ public class LoginPresenter {
                             // the auth state listener will be notified and logic to handle the
                             // signed in user can be handled in the listener.
                             if (!task.isSuccessful()) {
-                                loginView.showErrorMessage("Authentication failed.");
+                                loginView.showToast("Authentication failed.");
                             } else {
                                 loginView.continueToMainActivity();
                             }

@@ -6,5 +6,8 @@ package com.xin.bladedb.signup;
 public interface SignUpView {
     void hideProgress();
     void showProgress();
-    void showErrorMessage(String message);
+    void showToast(String message);
+    void showEmailWarning(String message);
+    void showPasswordWarning(String message);
+    void returnToLogin(String email, String password);
 }

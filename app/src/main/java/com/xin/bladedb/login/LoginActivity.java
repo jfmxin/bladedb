@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Inject
     FirebaseAuth.AuthStateListener firebaseListener;
 
+    //Android lifecycle calls
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +79,24 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Timber.d("Activity Result.");
+        switch (requestCode) {
+            case SignUpActivity.SIGN_UP:
+                Timber.d("Passing data through");
+                if (resultCode == RESULT_OK) {
+                    emailField.setText(data.getStringExtra("email"));
+                    passwordField.setText(data.getStringExtra("password"));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    //Login View
+    @Override
     public void hideProgress() {
         loginContainer.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
@@ -90,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-    public void showErrorMessage(String message) {
+    public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -111,6 +130,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         passwordField.setError(message);
     }
 
+    // OnClickListeners
     @OnClick(R.id.login)
     public void login() {
         loginPresenter.login(emailField.getText().toString(), passwordField.getText().toString());
@@ -122,21 +142,4 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         startActivityForResult(intent, SignUpActivity.SIGN_UP);
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Timber.d("Activity Result.");
-        switch (requestCode) {
-            case SignUpActivity.SIGN_UP:
-                Timber.d("Passing data through");
-                if (resultCode == RESULT_OK) {
-                    emailField.setText(data.getStringExtra("email"));
-                    passwordField.setText(data.getStringExtra("password"));
-                }
-                break;
-            default:
-                break;
-        }
-    }
 }

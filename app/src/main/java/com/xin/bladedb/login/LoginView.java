@@ -6,7 +6,7 @@ package com.xin.bladedb.login;
 public interface LoginView {
     void hideProgress();
     void showProgress();
-    void showErrorMessage(String message);
+    void showToast(String message);
     void continueToMainActivity();
     void showEmailWarning(String message);
     void showPasswordWarning(String message);
