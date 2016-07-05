@@ -7,13 +7,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Singleton;
 
+import dagger.Module;
 import dagger.Provides;
 import timber.log.Timber;
 
 /**
  * Created by Xin on 7/4/2016.
  */
-public class LoginModule {
+@Module
+public class FireBaseModule {
 
     @Provides
     @Singleton
