@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.xin.bladedb.MainApplication;
 import com.xin.bladedb.R;
 import com.xin.bladedb.login.LoginPresenter;
-import com.xin.bladedb.login.LoginView;
 
 import javax.inject.Inject;
 
@@ -26,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class SignUpActivity extends AppCompatActivity implements LoginView {
+public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
     public static final int SIGN_UP = 10;
 

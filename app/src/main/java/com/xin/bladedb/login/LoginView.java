@@ -7,4 +7,7 @@ public interface LoginView {
     void hideProgress();
     void showProgress();
     void showErrorMessage(String message);
+    void continueToMainActivity();
+    void showEmailWarning(String message);
+    void showPasswordWarning(String message);
 }

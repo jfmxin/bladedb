@@ -12,7 +12,7 @@ public class SignUpPresenter {
 
     }
 
-    public void setView(SignUpView loginView){
+    public void setView(SignUpView signUpView){
 
     }
 

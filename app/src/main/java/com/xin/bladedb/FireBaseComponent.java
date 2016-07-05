@@ -18,5 +18,5 @@ import dagger.Component;
 })
 public interface FireBaseComponent {
     void inject(LoginActivity loginActivity);
-    void inject(SignUpActivity signUpActivity);
+    void inject(SignUpActivity signupactivity);
 }
