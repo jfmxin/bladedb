@@ -1,5 +1,7 @@
-package com.xin.bladedb;
+package com.xin.bladedb.dependencyinjection.component;
 
+import com.xin.bladedb.dependencyinjection.module.AppModule;
+import com.xin.bladedb.dependencyinjection.module.FireBaseAuthModule;
 import com.xin.bladedb.login.LoginActivity;
 import com.xin.bladedb.signup.SignUpActivity;
 
@@ -13,10 +15,10 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = {
-        FireBaseModule.class,
+        FireBaseAuthModule.class,
         AppModule.class
 })
-public interface FireBaseComponent {
+public interface FirebaseAuthComponent {
     void inject(LoginActivity loginActivity);
     void inject(SignUpActivity signupactivity);
 }

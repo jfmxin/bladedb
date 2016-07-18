@@ -3,6 +3,7 @@ package com.xin.bladedb.signup;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.xin.bladedb.MainApplication;
 import com.xin.bladedb.R;
 
@@ -21,6 +23,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
@@ -44,7 +47,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
     @Inject
     FirebaseAuth firebaseAuth;
 
-    @Inject
     FirebaseAuth.AuthStateListener firebaseListener;
 
     @Inject
@@ -64,6 +66,19 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
     @Override
     protected void onStart() {
         super.onStart();
+        firebaseListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Timber.d("User is signed in.");
+                } else {
+                    // User is signed out
+                    Timber.d("User is signed out.");
+                }
+            }
+        };
         firebaseAuth.addAuthStateListener(firebaseListener);
     }
 

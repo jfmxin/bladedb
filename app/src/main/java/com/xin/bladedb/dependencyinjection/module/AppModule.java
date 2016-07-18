@@ -1,4 +1,4 @@
-package com.xin.bladedb;
+package com.xin.bladedb.dependencyinjection.module;
 
 import android.app.Application;
 
@@ -15,7 +15,7 @@ public class AppModule {
 
     Application application;
 
-    AppModule(Application application) {
+    public AppModule(Application application) {
         this.application = application;
     }
 

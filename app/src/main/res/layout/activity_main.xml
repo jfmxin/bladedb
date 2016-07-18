@@ -9,10 +9,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.xin.bladedb.MainActivity">
 
+    <FrameLayout
+        android:id="@+id/fragment_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <Button
         android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:visibility="gone"
         android:text="Sign Out" />
 </RelativeLayout>
